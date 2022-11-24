@@ -1,0 +1,92 @@
+#include <Wire.h>     // include Arduino Wire library
+#include "rgb_lcd.h"  // include Seeed Studio LCD library
+
+rgb_lcd lcd;  // initialize LCD library
+
+const int colorR = 155;
+const int colorG = 250;
+const int colorB = 20;
+ 
+void setup() {
+  // initialize the LCD with 16 columns and 2 rows:
+  lcd.begin(16, 2);
+
+  // Set up background backlight color
+  lcd.setRGB(colorR, colorG, colorB);
+ 
+  // move cursor to upper left position (0, 0)
+  lcd.setCursor(0, 0);
+ 
+  // print text on the LCD
+  lcd.print("Good Morning!");
+ 
+  char txt[] = "The time is now  \0";
+ 
+  lcd.setCursor(0, 1);  // move cursor to second row
+  lcd.print(txt);       // print text array
+  delay(1000);          // wait a second
+ 
+  while(txt[0] != '\0')
+  {
+    byte i = 0;
+    lcd.setCursor(0, 1);
+    while(txt[i] != '\0') // shift the text array to the left by 1 position
+    {
+      lcd.write(txt[i]);  // print one character
+      txt[i] = txt[i+1];  // shift the text array to the left
+      i++;
+    }
+ 
+    lcd.write(' ');  // print a space
+    delay(200);      // wait 200 milliseconds
+  }
+ 
+  delay(1000);    // wait a second
+}
+ 
+// main loop
+void loop() {
+  lcd.setCursor(0, 1);  // move cursor to position (0, 1)
+ 
+  // print number of seconds since the lase reset
+  lcd.print( millis()/1000 );
+ 
+  delay(200);      // wait 200 milliseconds
+}
+
+
+
+
+
+
+
+stuff to check/continue to add time
+#include "Grove_LCD_RGB_Backlight.h"
+
+rgb_lcd lcd;
+
+const int colorR = 200;
+const int colorG = 200;
+const int colorB = 200;
+
+void setup() {
+    // set up the LCD's number of columns and rows:
+    lcd.begin(16, 2);
+
+    // Set up background backlight color
+    lcd.setRGB(colorR, colorG, colorB);
+
+    lcd.print("hello, world!");
+
+    Time.zone(+2.00);
+
+    delay(1000);
+}
+
+void loop() {
+    lcd.setCursor(0,0);
+    // Format from C library: https://www.gnu.org/software/libc/manual/html_node/Low_002dLevel-Time-String-Parsing.html
+    lcd.print(Time.format(Time.now(), "%T"));
+
+    delay(1000);
+}
