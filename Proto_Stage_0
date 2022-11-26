@@ -18,6 +18,9 @@ int hours = 8;
 
 bool alarm=false;
 
+int sensorPin = A0;
+int sensorValue = 0;
+
 void setup() 
 {
   // set up the LCD's number of columns and rows:
@@ -119,4 +122,10 @@ void loop()
   delay(1000);
   tone(buzzer,0);
   delay(1000);}
+
+  //alarm deactivation via touch sensor
+  sensorValue = analogRead(sensorPin);
+  if (sensorValue > 100) {
+    exit(0);
+  }
 }
